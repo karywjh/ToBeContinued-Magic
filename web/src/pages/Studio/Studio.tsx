@@ -1,35 +1,40 @@
 import { useParams } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
 import styles from './Studio.module.scss'
+import {
+  useProgram,
+  useProgramMetadata,
+  useNFTs,
+} from '@thirdweb-dev/react/solana'
+import { useWallet } from '@solana/wallet-adapter-react'
+import Nft from '../../components/Nft/Nft'
 
 const Studio = () => {
-  const { collectionId } = useParams()
+  const { collectionAddr } = useParams()
+
+  const { data: program } = useProgram(collectionAddr, 'nft-collection')
+  const { data: metadata, isLoading: loadingMetadata } =
+    useProgramMetadata(program)
+  const { data: nfts, isLoading } = useNFTs(program)
+  const { publicKey } = useWallet()
 
   return (
     <div>
       <Navbar />
-      Studio
-      {/* <iframe
-        style={{ border: '1px, solid, rgba(0, 0, 0, 0.1)' }}
-        width="800"
-        height="450"
-        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FvukiJ94JWGLZZ0AqP6mC0p%2FLogo-Design%3Fnode-id%3D32%253A1139%26t%3D7xtX5yvM3MCX8svb-1"
-        allowFullScreen
-      ></iframe> */}
-      {/* <iframe
-        style={{ border: '1px, solid, rgba(0, 0, 0, 0.1)' }}
-        width="800"
-        height="450"
-        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FvukiJ94JWGLZZ0AqP6mC0p%2FLogo-Design%3Fnode-id%3D32%253A1139%26t%3D7xtX5yvM3MCX8svb-1"
-        allowFullScreen
-      ></iframe> */}
-      <iframe
-        style={{ border: '1px, solid, rgba(0, 0, 0, 0.1)' }}
-        width="800"
-        height="450"
-        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FvukiJ94JWGLZZ0AqP6mC0p%2FLogo-Design%3Fnode-id%3D0%253A1%26t%3D7xtX5yvM3MCX8svb-1"
-        allowFullScreen
-      ></iframe>
+      <div className={styles.studio}>
+        <div className={styles.container}>
+          <div className={styles.title}>{metadata?.name}'s Materials</div>
+          <div className={styles.gallery}>
+            {nfts?.map((nft, idx) => (
+              <Nft key={idx} nft={nft} />
+            ))}
+          </div>
+        </div>
+        <div className={styles.workstation}>
+          <div className={styles.playground}></div>
+          <div className={styles.controls}></div>
+        </div>
+      </div>
     </div>
   )
 }

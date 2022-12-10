@@ -13,18 +13,23 @@ import {
   SolflareWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { clusterApiUrl } from '@solana/web3.js'
+import { ThirdwebProvider } from '@thirdweb-dev/react/solana'
+import { Network } from '@thirdweb-dev/sdk/solana'
 
 const endpoint = clusterApiUrl(WalletAdapterNetwork.Devnet)
 const wallets = [new PhantomWalletAdapter(), new SolflareWalletAdapter()]
+const network: Network = 'devnet'
 
 ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
   <React.StrictMode>
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          <RouterProvider router={router} />,
-        </WalletModalProvider>
-      </WalletProvider>
+      <ThirdwebProvider network={network}>
+        <WalletProvider wallets={wallets} autoConnect>
+          <WalletModalProvider>
+            <RouterProvider router={router} />,
+          </WalletModalProvider>
+        </WalletProvider>
+      </ThirdwebProvider>
     </ConnectionProvider>
   </React.StrictMode>,
 )

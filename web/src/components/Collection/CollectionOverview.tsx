@@ -1,20 +1,30 @@
 import styles from './CollectionOverview.module.scss'
-import person1 from '../../assets/person1.png'
 import addIcon from '../../assets/add.svg'
 import { useNavigate } from 'react-router-dom'
+import {
+  useProgram,
+  useProgramMetadata,
+  useNFTs,
+} from '@thirdweb-dev/react/solana'
+import { NFT } from '@thirdweb-dev/sdk'
 
 export interface CollectionOverviewProps {
-  collectionId?: string
+  collectionAddr?: string
 }
 
-const CollectionOverview = ({ collectionId }: CollectionOverviewProps) => {
+const CollectionOverview = ({ collectionAddr }: CollectionOverviewProps) => {
   const navigate = useNavigate()
 
-  const collectionName = 'TBC'
-  const collectionImg = person1
+  const { data: program } = useProgram(collectionAddr, 'nft-collection')
+  const { data: metadata } = useProgramMetadata(program)
+  const { data: nfts } = useNFTs(program)
+
+  const collectionName = String(metadata?.name)
+  const collectionImg = String(metadata?.image)
+  const collectionDescription = String(metadata?.description)
   const totalRoyaltyPaid = 0
 
-  if (!collectionId) {
+  if (!collectionAddr) {
     return (
       <div
         className={styles.addCollection}
@@ -32,7 +42,7 @@ const CollectionOverview = ({ collectionId }: CollectionOverviewProps) => {
   return (
     <div
       className={styles.collection}
-      onClick={() => navigate(`/studio/${collectionId}`)}
+      onClick={() => navigate(`/studio/${collectionAddr}`)}
     >
       <img
         src={collectionImg}
@@ -41,8 +51,9 @@ const CollectionOverview = ({ collectionId }: CollectionOverviewProps) => {
       ></img>
       <div className={styles.infoContainer}>
         <div className={styles.name}>{collectionName}</div>
+        <div className={styles.description}>{collectionDescription}</div>
         <div className={styles.royalty}>
-          Total Royalties Paid: {totalRoyaltyPaid}
+          Total Royalties Earned: {totalRoyaltyPaid}
         </div>
       </div>
     </div>

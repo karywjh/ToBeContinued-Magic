@@ -19,21 +19,22 @@
 }
 
 .collectionImg {
-  width: 300px;
-  height: 300px;
+  max-height: 300px;
+  max-width: 300px;
 }
 
 .infoContainer {
   height: 100px;
+  text-align: center;
 
   .name {
     font-weight: 600;
     font-size: 15px;
-    text-align: center;
   }
 
+  .description {
+  }
   .royalty {
-    text-align: center;
   }
 }
 
