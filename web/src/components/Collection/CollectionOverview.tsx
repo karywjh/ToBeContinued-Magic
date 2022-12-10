@@ -32,7 +32,7 @@ const CollectionOverview = ({ collectionId }: CollectionOverviewProps) => {
   return (
     <div
       className={styles.collection}
-      onClick={() => navigate(`/collection/${collectionId}`)}
+      onClick={() => navigate(`/studio/${collectionId}`)}
     >
       <img
         src={collectionImg}

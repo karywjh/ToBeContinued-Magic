@@ -7,8 +7,7 @@ import Studio from './pages/Studio/Studio'
 const router = createBrowserRouter([
   { path: '/', element: <Home /> },
   { path: '/browse', element: <Browse /> },
-  { path: '/studio', element: <Studio /> },
-  { path: '/collection/:collectionId', element: <CollectionDetail /> },
+  { path: '/studio/:collectionId', element: <Studio /> },
 ])
 
 export default router

@@ -1,6 +1,13 @@
+import { useParams } from 'react-router-dom'
+import Navbar from '../../components/Navbar/Navbar'
+import styles from './Studio.module.scss'
+
 const Studio = () => {
+  const { collectionId } = useParams()
+
   return (
     <div>
+      <Navbar />
       Studio
       {/* <iframe
         style={{ border: '1px, solid, rgba(0, 0, 0, 0.1)' }}
