@@ -1,4 +1,5 @@
 import {
+  CreateNftInput,
   Metaplex,
   PublicKey,
   walletAdapterIdentity,
@@ -57,29 +58,31 @@ const Mint = () => {
       sellerFeeBasisPoints,
     })
 
+    const metadata: CreateNftInput = {
+      name,
+      symbol,
+      sellerFeeBasisPoints,
+      uri,
+      creators: [
+        {
+          address: wallet.publicKey,
+          share: 100,
+        },
+      ],
+      ...(collectionAddr && { collection: new PublicKey(collectionAddr) }),
+    }
+
     const result = await metaplex
       .use(walletAdapterIdentity(wallet))
       .nfts()
-      .create({
-        name,
-        symbol,
-        sellerFeeBasisPoints,
-        uri,
-        creators: [
-          {
-            address: wallet.publicKey,
-            share: 100,
-          },
-        ],
-        collection: new PublicKey(collectionAddr),
-      })
+      .create(metadata)
 
-    console.log(result)
+    console.log('tokenAddress', result.tokenAddress.toBase58())
   }
 
   return (
     <div className={styles.page}>
-      <h1>Mint Payable NFT</h1>
+      <h1>Mint NFT</h1>
       <div className={styles.list}>
         <input
           className={styles.input}

@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^7.0.0",
     "@metaplex-foundation/js": "^0.17.9",
+    "@metaplex-foundation/mpl-token-metadata": "^2.5.2",
     "@solana/wallet-adapter-base": "^0.9.19",
     "@solana/wallet-adapter-react": "^0.15.25",
     "@solana/wallet-adapter-react-ui": "^0.9.23",
@@ -13,8 +14,6 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "@thirdweb-dev/react": "^3.6.7",
-    "@thirdweb-dev/sdk": "^3.6.7",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.8",
     "@types/react": "^18.0.26",

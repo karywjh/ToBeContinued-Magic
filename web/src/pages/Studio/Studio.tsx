@@ -1,27 +1,13 @@
-import { Metaplex } from '@metaplex-foundation/js'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { PublicKey } from '@solana/web3.js'
-import {
-  useNFTs,
-  useProgram,
-  useProgramMetadata,
-} from '@thirdweb-dev/react/solana'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
-import Nft from '../../components/Nft/Nft'
 import Playground, { PlaygroundRef } from '../../components/Playground'
 import styles from './Studio.module.scss'
 
 const Studio = () => {
   const { collectionAddr } = useParams()
   const { publicKey: currentUserPubkey } = useWallet()
-  const { connection } = useConnection()
-  const { data: program } = useProgram(collectionAddr, 'nft-collection')
-  const { data: metadata } = useProgramMetadata(program)
-  const { data: nfts } = useNFTs(program)
-
-  const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
   const [isMinting, setIsMinting] = useState(false)
   const [name, setName] = useState('')
@@ -29,7 +15,7 @@ const Studio = () => {
 
   const playgroundRef = useRef<PlaygroundRef>(null)
 
-  const selectImage = () => {
+  const selectImageFile = () => {
     return new Promise<File | undefined>(resolve => {
       const input = document.createElement('input')
 
@@ -42,8 +28,8 @@ const Studio = () => {
     })
   }
 
-  const addImage = async () => {
-    const imageFile = await selectImage()
+  const addImageFile = async () => {
+    const imageFile = await selectImageFile()
 
     if (imageFile) {
       const reader = new FileReader()
@@ -72,26 +58,6 @@ const Studio = () => {
     setIsMinting(true)
 
     const sellerFeeBasisPoints = Number(sellerFeeBasisPoints_)
-
-    const { uri } = await metaplex.nfts().uploadMetadata({
-      name,
-      seller_fee_basis_points: sellerFeeBasisPoints,
-    })
-
-    const result = await metaplex.nfts().create({
-      name,
-      sellerFeeBasisPoints,
-      uri,
-      creators: [
-        {
-          address: currentUserPubkey,
-          share: 100,
-        },
-      ],
-      collection: new PublicKey(collectionAddr),
-    })
-
-    console.log(result)
   }
 
   return (
@@ -99,9 +65,9 @@ const Studio = () => {
       <Navbar />
       <div className={styles.studio}>
         <div className={styles.container}>
-          <div className={styles.title}>{metadata?.name}'s Materials</div>
+          {/* <div className={styles.title}>{metadata?.name}'s Materials</div> */}
           <div className={styles.gallery}>
-            {nfts?.map((nft, idx) => (
+            {/* {nfts?.map((nft, idx) => (
               <Nft
                 key={idx}
                 nft={nft}
@@ -113,7 +79,7 @@ const Studio = () => {
                   }
                 }}
               />
-            ))}
+            ))} */}
           </div>
         </div>
         <div className={styles.workstation}>
@@ -127,8 +93,9 @@ const Studio = () => {
           </div>
           <div className={styles.controls}>
             <div className={styles.upload}>
-              <button onClick={addImage}>Add Image</button>
-              {/* TODO add upload image / audio feature */}
+              <button onClick={addImageFile}>Add Image</button>
+              <button onClick={addImageFile}>Bring to Front</button>
+              <button onClick={addImageFile}>Send to Back</button>
             </div>
           </div>
           <div className={styles.mintButton} onClick={mint}>
