@@ -5,6 +5,7 @@ import {
   useProgram,
   useProgramMetadata,
   useNFTs,
+  useMintNFT,
 } from '@thirdweb-dev/react/solana'
 import { useWallet } from '@solana/wallet-adapter-react'
 import Nft from '../../components/Nft/Nft'
@@ -15,8 +16,11 @@ const Studio = () => {
   const { data: program } = useProgram(collectionAddr, 'nft-collection')
   const { data: metadata, isLoading: loadingMetadata } =
     useProgramMetadata(program)
-  const { data: nfts, isLoading } = useNFTs(program)
+  const { data: nfts } = useNFTs(program)
+  const { mutateAsync: mintNft, isLoading: isMinting } = useMintNFT(program)
   const { publicKey } = useWallet()
+
+  const mint = async () => {}
 
   return (
     <div>
@@ -32,7 +36,14 @@ const Studio = () => {
         </div>
         <div className={styles.workstation}>
           <div className={styles.playground}></div>
-          <div className={styles.controls}></div>
+          <div className={styles.controls}>
+            <div className={styles.upload}>
+              {/* TODO add upload image / audio feature */}
+            </div>
+          </div>
+          <div className={styles.mintButton} onClick={mint}>
+            {isMinting ? 'Minting...' : 'Mint'}
+          </div>
         </div>
       </div>
     </div>
