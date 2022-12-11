@@ -1,5 +1,3 @@
-import { ThirdwebNftMedia } from '@thirdweb-dev/react'
-import { nftCreatorsQuery } from '@thirdweb-dev/react/solana'
 import { NFT } from '@thirdweb-dev/sdk'
 import styles from './Nft.module.scss'
 

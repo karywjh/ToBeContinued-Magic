@@ -1,11 +1,9 @@
-@import 'npm:@solana/wallet-adapter-react-ui/styles.css';
+@import './styles/normalize';
+@import '@solana/wallet-adapter-react-ui/styles.css';
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap');
 
 body {
-  margin: 0;
   font-family: 'Ubuntu';
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 input,
@@ -13,16 +11,6 @@ textarea,
 button,
 select {
   font-family: 'Ubuntu';
-  display: block;
-  appearance: none;
-  border: none;
-  background: none;
-  margin: 0;
-  padding: 0;
-
-  &:focus {
-    outline: none;
-  }
 }
 
 code {
