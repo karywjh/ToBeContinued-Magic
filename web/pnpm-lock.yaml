@@ -19,7 +19,9 @@ specifiers:
   '@types/react-dom': ^18.0.9
   browserify-zlib: ^0.2.0
   buffer: ^6.0.3
+  classnames: ^2.3.2
   crypto-browserify: ^3.12.0
+  html-to-image: ^1.11.1
   nft.storage: ^7.0.0
   path-browserify: ^1.0.1
   react: ^18.2.0
@@ -51,7 +53,9 @@ dependencies:
   '@types/react-dom': 18.0.9
   browserify-zlib: 0.2.0
   buffer: 6.0.3
+  classnames: 2.3.2
   crypto-browserify: 3.12.0
+  html-to-image: 1.11.1
   nft.storage: 7.0.0_node-fetch@2.6.7
   path-browserify: 1.0.1
   react: 18.2.0
@@ -7675,6 +7679,10 @@ packages:
       static-extend: 0.1.2
     dev: false
 
+  /classnames/2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
+
   /clean-css/5.3.1:
     resolution: {integrity: sha512-lCr8OHhiWCTw4v8POJovCoh4T7I9U11yVsPjMWWnnMmp9ZowCxyad1Pathle/9HjaDp+fdQKjO9fQydE6RHTZg==}
     engines: {node: '>= 10.0'}
@@ -10603,6 +10611,10 @@ packages:
       param-case: 3.0.4
       relateurl: 0.2.7
       terser: 5.16.1
+    dev: false
+
+  /html-to-image/1.11.1:
+    resolution: {integrity: sha512-W6ZXctQQfhFA2tCcDbK1jCywwT9Oo1ucyXwlxku3zHacyhLPeMhs+h2OLBNeoYrPSgzgeOqhhSs+MbEmL2fDLw==}
     dev: false
 
   /html-webpack-plugin/5.5.0_webpack@5.75.0:

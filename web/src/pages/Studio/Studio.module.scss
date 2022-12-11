@@ -37,11 +37,15 @@
   justify-content: center;
   width: 50%;
 
-  .playground {
+  .playgroundBorder {
     border: 2px solid grey;
-    border-radius: 10;
-    width: 530px;
-    height: 530px;
+    width: 504px;
+    height: 504px;
+
+    .playground {
+      width: 500px;
+      height: 500px;
+    }
   }
 }
 

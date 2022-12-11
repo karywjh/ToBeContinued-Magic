@@ -6,10 +6,11 @@ import {
   useProgram,
   useProgramMetadata,
 } from '@thirdweb-dev/react/solana'
-import { useEffect, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Navbar from '../../components/Navbar/Navbar'
 import Nft from '../../components/Nft/Nft'
+import Playground, { PlaygroundRef } from '../../components/Playground'
 import styles from './Studio.module.scss'
 
 const Studio = () => {
@@ -20,15 +21,30 @@ const Studio = () => {
   const { data: metadata } = useProgramMetadata(program)
   const { data: nfts } = useNFTs(program)
 
-  const metaplex = new Metaplex(connection)
+  const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
   const [isMinting, setIsMinting] = useState(false)
   const [name, setName] = useState('')
   const [sellerFeeBasisPoints_, setSellerFeeBasisPoints] = useState('')
-  const [imageFile, setImageFile] = useState<File>()
-  const [imageSrc, setImageSrc] = useState<string>()
 
-  useEffect(() => {
+  const playgroundRef = useRef<PlaygroundRef>(null)
+
+  const selectImage = () => {
+    return new Promise<File | undefined>(resolve => {
+      const input = document.createElement('input')
+
+      input.type = 'file'
+      input.onchange = event => {
+        resolve((event.target as HTMLInputElement).files?.[0])
+      }
+
+      input.click()
+    })
+  }
+
+  const addImage = async () => {
+    const imageFile = await selectImage()
+
     if (imageFile) {
       const reader = new FileReader()
 
@@ -36,17 +52,17 @@ const Studio = () => {
         'load',
         () => {
           if (reader.result) {
-            setImageSrc(reader.result.toString())
+            const imageDataURL = reader.result.toString()
+
+            playgroundRef.current?.addImage(imageDataURL)
           }
         },
         false,
       )
 
       reader.readAsDataURL(imageFile)
-    } else {
-      setImageSrc(void 0)
     }
-  }, [imageFile])
+  }
 
   const mint = async () => {
     if (!collectionAddr || !currentUserPubkey) {
@@ -86,14 +102,32 @@ const Studio = () => {
           <div className={styles.title}>{metadata?.name}'s Materials</div>
           <div className={styles.gallery}>
             {nfts?.map((nft, idx) => (
-              <Nft key={idx} nft={nft} />
+              <Nft
+                key={idx}
+                nft={nft}
+                onClick={() => {
+                  const imageUrl = nft.metadata.image
+
+                  if (imageUrl) {
+                    playgroundRef.current?.addImage(imageUrl)
+                  }
+                }}
+              />
             ))}
           </div>
         </div>
         <div className={styles.workstation}>
-          <div className={styles.playground}></div>
+          <div className={styles.playgroundBorder}>
+            {useMemo(
+              () => (
+                <Playground ref={playgroundRef} className={styles.playground} />
+              ),
+              [],
+            )}
+          </div>
           <div className={styles.controls}>
             <div className={styles.upload}>
+              <button onClick={addImage}>Add Image</button>
               {/* TODO add upload image / audio feature */}
             </div>
           </div>

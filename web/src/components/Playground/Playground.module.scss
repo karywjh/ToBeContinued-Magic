@@ -1,0 +1,14 @@
+.playground {
+  position: relative;
+  overflow: hidden;
+
+  img {
+    display: block;
+    position: absolute;
+
+    &.selected {
+      cursor: move;
+      outline: 2px solid #3030d0;
+    }
+  }
+}

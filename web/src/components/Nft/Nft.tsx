@@ -3,16 +3,17 @@ import styles from './Nft.module.scss'
 
 export interface NftProps {
   nft: NFT
+  onClick?: () => void
 }
 
 // revealed address character count
 const REVEALED_COUNT = 4
 
-const Nft = ({ nft }: NftProps) => {
+const Nft = ({ nft, onClick }: NftProps) => {
   const totalRoyaltyPaid = 0 // TODO
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onClick={onClick}>
       <div className={styles.imgContainer}>
         <img
           src={String(nft.metadata?.image)}
