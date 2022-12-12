@@ -8,7 +8,11 @@ const Browse = () => {
       <Navbar />
       <div className={styles.title}>Collections</div>
       <div className={styles.collections}>
-        <CollectionOverview collectionAddr="5KbNiVafD8zcrgtp2tXKcp8YZz6ohJMmka1XcUjJa5wX"></CollectionOverview>
+        <CollectionOverview
+          name="Animals"
+          image=""
+          description="Lets build cool animals"
+        ></CollectionOverview>
         {/* <CollectionOverview collectionAddr="12345"></CollectionOverview>
         <CollectionOverview collectionAddr="12345"></CollectionOverview>
         <CollectionOverview collectionAddr="12345"></CollectionOverview>
@@ -18,8 +22,6 @@ const Browse = () => {
         <CollectionOverview collectionAddr="12345"></CollectionOverview>
         <CollectionOverview collectionAddr="12345"></CollectionOverview>
         <CollectionOverview collectionAddr="12345"></CollectionOverview> */}
-
-        <CollectionOverview></CollectionOverview>
       </div>
     </div>
   )

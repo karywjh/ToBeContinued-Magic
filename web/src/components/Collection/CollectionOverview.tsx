@@ -1,49 +1,26 @@
-import styles from './CollectionOverview.module.scss'
-import addIcon from '../../assets/add.svg'
 import { useNavigate } from 'react-router-dom'
-import {
-  useProgram,
-  useProgramMetadata,
-  useNFTs,
-} from '@thirdweb-dev/react/solana'
-import { NFT } from '@thirdweb-dev/sdk'
+import styles from './CollectionOverview.module.scss'
 
 export interface CollectionOverviewProps {
-  collectionAddr?: string
+  name: string
+  image: string
+  description: string
 }
 
-const CollectionOverview = ({ collectionAddr }: CollectionOverviewProps) => {
+const CollectionOverview = ({
+  name,
+  image,
+  description,
+}: CollectionOverviewProps) => {
   const navigate = useNavigate()
 
-  const { data: program } = useProgram(collectionAddr, 'nft-collection')
-  const { data: metadata } = useProgramMetadata(program)
-  const { data: nfts } = useNFTs(program)
-
-  const collectionName = String(metadata?.name)
-  const collectionImg = String(metadata?.image)
-  const collectionDescription = String(metadata?.description)
+  const collectionName = String(name)
+  const collectionImg = String(image)
+  const collectionDescription = String(description)
   const totalRoyaltyPaid = 0
 
-  if (!collectionAddr) {
-    return (
-      <div
-        className={styles.addCollection}
-        onClick={() => navigate(`/newcollection`)}
-      >
-        <img
-          src={addIcon}
-          alt="add new collection"
-          className={styles.addIcon}
-        ></img>
-      </div>
-    )
-  }
-
   return (
-    <div
-      className={styles.collection}
-      onClick={() => navigate(`/studio/${collectionAddr}`)}
-    >
+    <div className={styles.collection} onClick={() => navigate(`/studio`)}>
       <img
         src={collectionImg}
         alt="collectionImage"
