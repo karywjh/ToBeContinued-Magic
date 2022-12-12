@@ -29,6 +29,9 @@ const NftRenderer = ({ nft, onClick }: NftRendererProps) => {
               }%)`,
           )}
         </div>
+        <div className={styles.seller}>
+          Seller Fee Basis Points: {nft.sellerFeeBasisPoints}
+        </div>
       </div>
     </div>
   )
