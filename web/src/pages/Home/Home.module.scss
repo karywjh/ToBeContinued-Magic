@@ -1,16 +1,111 @@
 .home {
+  overflow: hidden;
+  position: absolute;
+  width: 100vw;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background-color: #ffffff;
 }
 
 .background {
-  width: 100vh;
-  animation-name: enlarge;
-  animation-duration: 1s;
+  position: absolute;
+
+  width: 100vw;
+  left: 50%;
+  top: 50%;
+
+  transition: transform 1s;
+  transform: translate(-50%, -50%) scale(0);
+
+  &.visible {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.squirry {
+  position: absolute;
+
+  width: 60vh;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+
+  transition: opacity 500ms, transform 1s;
+  opacity: 0;
+  transform: translate(50%, -50%);
+
+  &.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.santaHat {
+  position: absolute;
+
+  width: 35vh;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  margin-top: -24vh;
+  margin-left: -5vh;
+
+  transition: opacity 500ms, transform 500ms;
+  opacity: 0;
+  transform: translate(calc(-50% + 10vh), calc(-50% - 10vh));
+
+  &.visibleFirst {
+    opacity: 1;
+  }
+
+  &.visibleSecond {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.santaCloth {
+  position: absolute;
+
+  width: 32vh;
+  left: 50%;
+  top: 50%;
+  z-index: 5;
+  margin-top: 15vh;
+  margin-left: -13vh;
+
+  transition: opacity 500ms, transform 500ms;
+  opacity: 0;
+  transform: translate(calc(-50% - 35vh), calc(-50% - 20vh));
+
+  &.visibleFirst {
+    opacity: 1;
+  }
+
+  &.visibleSecond {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.tree {
+  position: absolute;
+
+  width: 40vh;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  margin-top: -5vh;
+  margin-left: 20vh;
+
+  transition: opacity 500ms, transform 500ms;
+  opacity: 0;
+  transform: translate(calc(-50% + 30vh), calc(-50% - 10vh));
+
+  &.visibleFirst {
+    opacity: 1;
+  }
+
+  &.visibleSecond {
+    transform: translate(-50%, -50%);
+  }
 }
 
 .name {
@@ -22,11 +117,43 @@
   font-weight: 600;
 }
 
-@keyframes enlarge {
-  from {
-    width: 0px;
+.bottomLayer {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .tip {
+    padding: 20px 30px;
+    font-size: 40px;
+    border-radius: 25px;
+    color: #ffffff;
+    background-color: #00000080;
   }
-  to {
-    width: 100vh;
+
+  .button {
+    padding: 20px 30px;
+    font-size: 40px;
+    border-radius: 25px;
+    color: #ffffff;
+    background-color: #4010d0;
+    cursor: pointer;
+
+    transition: transform 150ms, background-color 150ms;
+
+    &:hover {
+      transform: scale(1.03);
+      background-color: #3000c0;
+    }
+
+    &:active {
+      transform: scale(1);
+    }
   }
 }
