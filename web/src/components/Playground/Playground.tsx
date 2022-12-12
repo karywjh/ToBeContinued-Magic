@@ -1,17 +1,18 @@
 import classNames from 'classnames'
-import { forwardRef, useImperativeHandle, useRef } from 'react'
 import * as htmlToImage from 'html-to-image'
-import styles from './Playground.module.scss'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { dataURLtoFile } from '../../common/utils'
+import styles from './Playground.module.scss'
 
 export interface PlaygroundRef {
-  addImage(url: string): HTMLImageElement
-  deleteImage(element: HTMLImageElement): void
-  selectImage(element: HTMLImageElement): void
-  bringToFront(element: HTMLImageElement): void
-  sendToBack(element: HTMLImageElement): void
-  deselectImage(): void
-  getSelection(): HTMLImageElement | undefined
+  add(url: string, dataKey?: string): HTMLElement
+  remove(element: HTMLElement): void
+  select(element: HTMLElement): void
+  deselect(): void
+  bringToFront(element: HTMLElement): void
+  sendToBack(element: HTMLElement): void
+  getAll(): HTMLElement[]
+  getSelection(): HTMLElement | undefined
   toPng(): Promise<File>
 }
 
@@ -20,25 +21,36 @@ export interface PlaygroundProps extends React.HTMLAttributes<HTMLDivElement> {}
 const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
   ({ className, ...props }, ref) => {
     const outputRef = useRef<HTMLDivElement>(null)
-    const selectionRef = useRef<HTMLImageElement>()
+    const selectionRef = useRef<HTMLElement>()
     const mouseDownRef = useRef(false)
     const mouseResizingRef = useRef(false)
 
-    const addImage = (url: string) => {
+    const add = (url: string, dataKey?: string) => {
       const output = outputRef.current!
+      const div = document.createElement('div')
+
+      div.className = styles.insertion
+      div.id = 'img_' + Math.random().toString(32).slice(2, 8)
+
+      if (dataKey) {
+        div.dataset.key = dataKey
+      }
+
+      div.style.zIndex = '1'
+      div.style.left = '20px'
+      div.style.top = '20px'
+      div.style.width = '300px'
+
       const img = document.createElement('img')
 
       img.src = url
-      img.id = 'img_' + Math.random().toString(32).slice(2, 8)
-      img.style.zIndex = '1'
-      img.style.left = '20px'
-      img.style.top = '20px'
-      img.style.width = '300px'
 
-      return output.appendChild(img)
+      div.appendChild(img)
+
+      return output.appendChild(div)
     }
 
-    const deleteImage = (element: HTMLImageElement) => {
+    const remove = (element: HTMLElement) => {
       if (selectionRef.current === element) {
         delete selectionRef.current
       }
@@ -46,7 +58,7 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       element.remove()
     }
 
-    const deselectImage = () => {
+    const deselect = () => {
       const selected = selectionRef.current
 
       if (selected) {
@@ -55,8 +67,8 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       }
     }
 
-    const selectImage = (element: HTMLImageElement) => {
-      deselectImage()
+    const select = (element: HTMLElement) => {
+      deselect()
 
       element.classList.add(styles.selected)
       selectionRef.current = element
@@ -68,17 +80,17 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       return selectionRef.current
     }
 
-    const bringToFront = (element: HTMLImageElement) => {
+    const bringToFront = (element: HTMLElement) => {
       const output = outputRef.current!
-      const elements = Array.from(output.children) as HTMLImageElement[]
+      const elements = Array.from(output.children) as HTMLElement[]
       const zIndices = elements.map(element => parseInt(element.style.zIndex))
 
       element.style.zIndex = (Math.max(...zIndices) + 1).toString()
     }
 
-    const sendToBack = (element: HTMLImageElement) => {
+    const sendToBack = (element: HTMLElement) => {
       const output = outputRef.current!
-      const elements = Array.from(output.children) as HTMLImageElement[]
+      const elements = Array.from(output.children) as HTMLElement[]
       const zIndices = elements.map(element => parseInt(element.style.zIndex))
 
       elements.forEach(
@@ -91,6 +103,10 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       element.style.zIndex = Math.min(...zIndices).toString()
     }
 
+    const getAll = () => {
+      return Array.from(outputRef.current!.children) as HTMLElement[]
+    }
+
     const toPng = async () => {
       const output = outputRef.current!
       const png = await htmlToImage.toPng(output)
@@ -100,12 +116,13 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
 
     useImperativeHandle(ref, () => {
       return {
-        addImage,
-        deleteImage,
-        selectImage,
-        deselectImage,
+        add,
+        remove,
+        select,
+        deselect,
         bringToFront,
         sendToBack,
+        getAll,
         getSelection,
         toPng,
       }
@@ -118,10 +135,13 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
         onMouseDown={event => {
           const { target } = event
 
-          if (target instanceof HTMLImageElement) {
-            selectImage(target)
+          if (
+            target instanceof HTMLDivElement &&
+            target.classList.contains(styles.insertion)
+          ) {
+            select(target)
           } else {
-            deselectImage()
+            deselect()
           }
 
           mouseDownRef.current = true
@@ -139,8 +159,8 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
 
             if (
               mouseResizingRef.current ||
-              (endX - event.clientX < 20 &&
-                endY - event.clientY < 20 &&
+              (endX - event.clientX < 10 &&
+                endY - event.clientY < 10 &&
                 endX > event.clientX &&
                 endY > event.clientY)
             ) {
@@ -152,6 +172,12 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
 
               selected.style.width = `${rect.width + distance * aspectRatio}px`
               selected.style.height = `${rect.height + distance}px`
+
+              const left = Number(selected.style.left.replace('px', ''))
+              const top = Number(selected.style.top.replace('px', ''))
+
+              selected.style.left = `${left - distance}px`
+              selected.style.top = `${top - distance}px`
 
               mouseResizingRef.current = true
             } else {
