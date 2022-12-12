@@ -8,7 +8,8 @@
   align-items: center;
   justify-content: space-between;
   z-index: 1;
-  background-color: #fffffff8;
+  background-color: #ffffff80;
+  backdrop-filter: blur(5px);
 }
 
 .name {

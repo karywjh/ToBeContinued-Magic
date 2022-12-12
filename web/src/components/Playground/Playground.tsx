@@ -2,13 +2,17 @@ import classNames from 'classnames'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import * as htmlToImage from 'html-to-image'
 import styles from './Playground.module.scss'
+import { dataURLtoFile } from '../../common/utils'
 
 export interface PlaygroundRef {
   addImage(url: string): HTMLImageElement
   deleteImage(element: HTMLImageElement): void
   selectImage(element: HTMLImageElement): void
+  bringToFront(element: HTMLImageElement): void
+  sendToBack(element: HTMLImageElement): void
   deselectImage(): void
-  toSvg(): void
+  getSelection(): HTMLImageElement | undefined
+  toPng(): Promise<File>
 }
 
 export interface PlaygroundProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -16,7 +20,7 @@ export interface PlaygroundProps extends React.HTMLAttributes<HTMLDivElement> {}
 const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
   ({ className, ...props }, ref) => {
     const outputRef = useRef<HTMLDivElement>(null)
-    const selectionRef = useRef<HTMLDivElement>()
+    const selectionRef = useRef<HTMLImageElement>()
     const mouseDownRef = useRef(false)
     const mouseResizingRef = useRef(false)
 
@@ -26,6 +30,7 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
 
       img.src = url
       img.id = 'img_' + Math.random().toString(32).slice(2, 8)
+      img.style.zIndex = '1'
       img.style.left = '20px'
       img.style.top = '20px'
       img.style.width = '300px'
@@ -59,11 +64,38 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       return element
     }
 
-    const toSvg = async () => {
-      const output = outputRef.current!
-      const svg = await htmlToImage.toSvg(output)
+    const getSelection = () => {
+      return selectionRef.current
+    }
 
-      return svg
+    const bringToFront = (element: HTMLImageElement) => {
+      const output = outputRef.current!
+      const elements = Array.from(output.children) as HTMLImageElement[]
+      const zIndices = elements.map(element => parseInt(element.style.zIndex))
+
+      element.style.zIndex = (Math.max(...zIndices) + 1).toString()
+    }
+
+    const sendToBack = (element: HTMLImageElement) => {
+      const output = outputRef.current!
+      const elements = Array.from(output.children) as HTMLImageElement[]
+      const zIndices = elements.map(element => parseInt(element.style.zIndex))
+
+      elements.forEach(
+        element =>
+          (element.style.zIndex = (
+            parseInt(element.style.zIndex) + 1
+          ).toString()),
+      )
+
+      element.style.zIndex = Math.min(...zIndices).toString()
+    }
+
+    const toPng = async () => {
+      const output = outputRef.current!
+      const png = await htmlToImage.toPng(output)
+
+      return dataURLtoFile(png, 'minted.png')
     }
 
     useImperativeHandle(ref, () => {
@@ -72,7 +104,10 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
         deleteImage,
         selectImage,
         deselectImage,
-        toSvg,
+        bringToFront,
+        sendToBack,
+        getSelection,
+        toPng,
       }
     })
 

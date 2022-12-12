@@ -19,6 +19,7 @@ const Studio = () => {
   const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
   const [nfts, setNfts] = useState<Nft[]>([])
+  const [usedNfts, setUsedNfts] = useState<Nft[]>([])
   const [isMinting, setIsMinting] = useState(false)
   const [name, setName] = useState('')
   const [sellerFeeBasisPoints_, setSellerFeeBasisPoints] = useState('')
@@ -82,6 +83,33 @@ const Studio = () => {
     }
   }
 
+  const bringToFront = () => {
+    const playground = playgroundRef.current!
+    const selection = playground.getSelection()
+
+    if (selection) {
+      playground.bringToFront(selection)
+    }
+  }
+
+  const sendToBack = () => {
+    const playground = playgroundRef.current!
+    const selection = playground.getSelection()
+
+    if (selection) {
+      playground.sendToBack(selection)
+    }
+  }
+
+  const deleteSelection = () => {
+    const playground = playgroundRef.current!
+    const selection = playground.getSelection()
+
+    if (selection) {
+      playground.deleteImage(selection)
+    }
+  }
+
   const mint = async () => {
     if (!wallet || !wallet.publicKey) {
       return
@@ -97,7 +125,7 @@ const Studio = () => {
       <Navbar />
       <div className={styles.studio}>
         <div className={styles.container}>
-          {/* <div className={styles.title}>{metadata?.name}'s Materials</div> */}
+          <div className={styles.title}>Collection Materials</div>
           <div className={styles.gallery}>
             {nfts?.map((nft, idx) => (
               <NftRenderer
@@ -109,6 +137,8 @@ const Studio = () => {
                   if (imageIPFSURI) {
                     playgroundRef.current?.addImage(getIPFSURL(imageIPFSURI))
                   }
+
+                  setUsedNfts(values => [...values, nft])
                 }}
               />
             ))}
@@ -124,15 +154,14 @@ const Studio = () => {
             )}
           </div>
           <div className={styles.controls}>
-            <div className={styles.upload}>
-              <button onClick={addImageFile}>Add Image</button>
-              <button onClick={addImageFile}>Bring to Front</button>
-              <button onClick={addImageFile}>Send to Back</button>
-            </div>
+            <button onClick={addImageFile}>Add Image</button>
+            <button onClick={bringToFront}>Bring to Front</button>
+            <button onClick={sendToBack}>Send to Back</button>
+            <button onClick={deleteSelection}>Delete</button>
           </div>
-          <div className={styles.mintButton} onClick={mint}>
+          <button className={styles.mintButton} onClick={mint}>
             {isMinting ? 'Minting...' : 'Mint'}
-          </div>
+          </button>
         </div>
       </div>
     </div>

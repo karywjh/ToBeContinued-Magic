@@ -1,7 +1,6 @@
 import {
   CreateNftInput,
   Metaplex,
-  PublicKey,
   walletAdapterIdentity,
 } from '@metaplex-foundation/js'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
@@ -15,7 +14,6 @@ const Mint = () => {
   const wallet = useWallet()
   const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
-  const [collectionAddr, setCollectionAddr] = useState('')
   const [name, setName] = useState('')
   const [symbol, setSymbol] = useState('')
   const [description, setDescription] = useState('')
@@ -69,7 +67,6 @@ const Mint = () => {
           share: 100,
         },
       ],
-      ...(collectionAddr && { collection: new PublicKey(collectionAddr) }),
     }
 
     const result = await metaplex
@@ -84,12 +81,6 @@ const Mint = () => {
     <div className={styles.page}>
       <h1>Mint NFT</h1>
       <div className={styles.list}>
-        <input
-          className={styles.input}
-          placeholder="Collection address"
-          value={collectionAddr}
-          onChange={event => setCollectionAddr(event.target.value)}
-        />
         <input
           className={styles.input}
           placeholder="Name"
