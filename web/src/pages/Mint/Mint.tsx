@@ -74,7 +74,7 @@ const Mint = () => {
       .nfts()
       .create(metadata)
 
-    console.log('tokenAddress', result.tokenAddress.toBase58())
+    console.log('tokenAddress', result.mintAddress.toBase58())
   }
 
   return (
