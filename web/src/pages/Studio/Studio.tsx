@@ -41,7 +41,7 @@ const Studio = () => {
   const [symbol, setSymbol] = useState('')
   const [description, setDescription] = useState('')
   const [contributionPoints_, setContributionPoints] = useState('')
-
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff')
   const playgroundRef = useRef<PlaygroundRef>(null)
 
   useEffect(() => {
@@ -260,7 +260,10 @@ const Studio = () => {
           </div>
         </div>
         <div className={styles.workstation}>
-          <div className={styles.playgroundBorder}>
+          <div
+            className={styles.playgroundBorder}
+            style={{ backgroundColor: backgroundColor }}
+          >
             {useMemo(
               () => (
                 <Playground ref={playgroundRef} className={styles.playground} />
@@ -273,6 +276,19 @@ const Studio = () => {
             <button onClick={bringToFront}>Bring to Front</button>
             <button onClick={sendToBack}>Send to Back</button>
             <button onClick={deleteSelection}>Delete</button>
+          </div>
+          <div className={styles.colorPicker}>
+            <div className={styles.colorDescription}>
+              Pick your favorite background color:
+            </div>
+            <input
+              className={styles.colorPick}
+              type="color"
+              value={backgroundColor}
+              onChange={e => {
+                setBackgroundColor(e.target.value)
+              }}
+            />
           </div>
           <button className={styles.mintButton} onClick={() => setModal(true)}>
             Mint

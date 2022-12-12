@@ -60,21 +60,36 @@
       border: none;
       border-radius: 10px;
       color: #ffffff;
-      background-color: #4010d0;
+      font-weight: 510;
+      background-color: #ff9e27;
       transition: background-color 150ms;
 
       cursor: pointer;
 
       &:hover {
-        background-color: #5020e0;
+        background-color: #0078d4;
       }
+    }
+  }
+
+  .colorPicker {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    .colorDescription {
+      margin-right: 10px;
+    }
+    .colorPick {
+      cursor: pointer;
     }
   }
 }
 
 .mintButton {
   margin-top: 15px;
-  background: linear-gradient(90deg, #f213a4 0%, #5204bf 100%);
+  background: linear-gradient(90deg, #ff2b67 0%, #ff8418 100%);
   padding: 15px 40px;
   border-radius: 15px;
   color: #ffffff;
@@ -82,6 +97,11 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.07);
+  }
+  transition: transform 200ms;
 }
 
 .modal {
@@ -152,7 +172,7 @@
         border: none;
         border-radius: 10px;
         transition: background-color 150ms;
-
+        font-weight: 510;
         cursor: pointer;
 
         &.cancelButton {
@@ -166,10 +186,10 @@
 
         &.confirmButton {
           color: #ffffff;
-          background-color: #4010d0;
+          background-color: #ff9e27dc;
 
           &:hover {
-            background-color: #5020e0;
+            background-color: #ff9e27;
           }
         }
       }

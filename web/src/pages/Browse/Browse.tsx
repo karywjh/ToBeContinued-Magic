@@ -1,6 +1,7 @@
 import CollectionOverview from '../../components/Collection/CollectionOverview'
 import Navbar from '../../components/Navbar/Navbar'
 import styles from './Browse.module.scss'
+import squirry from '../../assets/squirry.jpeg'
 
 const Browse = () => {
   return (
@@ -10,18 +11,9 @@ const Browse = () => {
       <div className={styles.collections}>
         <CollectionOverview
           name="Animals"
-          image=""
+          image={squirry}
           description="Lets build cool animals"
         ></CollectionOverview>
-        {/* <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview>
-        <CollectionOverview collectionAddr="12345"></CollectionOverview> */}
       </div>
     </div>
   )
