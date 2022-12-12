@@ -22,6 +22,8 @@ const PRE_MINTED_NFT_ADDRESSES = [
   '7aV4pNXZHBGDJmcrzk62uZHkuydqVdsudJLWAKzaDodd',
   '6tTDtui3ZVWgBnQAtTvQFZRTn7QgwrtpACh3jVzfn86N',
   'EfCuG67goBQUm33LBEQ3RtLChU8kbh12wKWJucsMwQ3',
+  'mA4x5bXtjSDciAumW9DVgS5aWdTbuAEGEEBfriKCXNx',
+  'BQxa4zTyQEGXacgBYREMRsgsCeX18K48ePpT7Px4sx1X',
 ]
 
 const Studio = () => {
