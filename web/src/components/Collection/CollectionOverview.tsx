@@ -25,7 +25,7 @@ const CollectionOverview = ({
         src={collectionImg}
         alt="collectionImage"
         className={styles.collectionImg}
-      ></img>
+      />
       <div className={styles.infoContainer}>
         <div className={styles.name}>{collectionName}</div>
         <div className={styles.description}>{collectionDescription}</div>
