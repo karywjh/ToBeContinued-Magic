@@ -1,0 +1,72 @@
+.page {
+  .container {
+    padding: 20px 40px;
+
+    .nft {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+
+      .image {
+        border-radius: 15px;
+        box-shadow: 0 0 15px #00000015;
+        width: 500px;
+        height: 500px;
+        margin-right: 40px;
+      }
+
+      .info {
+        .name {
+          font-size: 36px;
+        }
+
+        .symbol {
+          font-size: 18px;
+          text-transform: uppercase;
+        }
+
+        .description {
+          font-size: 18px;
+          color: #606060;
+          margin-top: 15px;
+        }
+
+        .seller {
+          margin-top: 30px;
+        }
+
+        .creators {
+          .title {
+            font-size: 20px;
+            font-weight: bold;
+          }
+
+          margin-top: 30px;
+        }
+
+        .buttons {
+          margin-top: 50px;
+
+          button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            background-color: #4010d0;
+            transition: background-color 150ms;
+
+            cursor: pointer;
+
+            &:hover {
+              background-color: #5020e0;
+            }
+          }
+        }
+
+        a {
+          color: #3050d0;
+        }
+      }
+    }
+  }
+}

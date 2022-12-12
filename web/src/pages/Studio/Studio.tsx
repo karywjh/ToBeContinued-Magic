@@ -7,6 +7,7 @@ import {
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getIPFSURL, uploadIPFSTokenMetadata } from '../../common/ipfs'
 import Navbar from '../../components/Navbar/Navbar'
 import NftRenderer from '../../components/NftRenderer/NftRenderer'
@@ -26,6 +27,7 @@ const PRE_MINTED_NFT_ADDRESSES = [
 const Studio = () => {
   const { connection } = useConnection()
 
+  const navigate = useNavigate()
   const wallet = useWallet()
   const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
@@ -202,7 +204,7 @@ const Studio = () => {
       .nfts()
       .create(metadata)
 
-    console.log('tokenAddress', result.mintAddress.toBase58())
+    navigate(`/view/${result.mintAddress.toBase58()}`)
   }
 
   return (
