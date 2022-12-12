@@ -89,7 +89,7 @@ const Studio = () => {
           if (reader.result) {
             const imageDataURL = reader.result.toString()
 
-            playgroundRef.current?.addImage(imageDataURL)
+            playgroundRef.current?.add(imageDataURL)
           }
         },
         false,
@@ -122,7 +122,21 @@ const Studio = () => {
     const selection = playground.getSelection()
 
     if (selection) {
-      playground.deleteImage(selection)
+      playground.remove(selection)
+
+      if (selection.dataset.key) {
+        if (
+          !playground
+            .getAll()
+            .some(element => element.dataset.key === selection.dataset.key)
+        ) {
+          setUsedNfts(values =>
+            values.filter(
+              value => value.address.toBase58() !== selection.dataset.key,
+            ),
+          )
+        }
+      }
     }
   }
 
@@ -178,33 +192,38 @@ const Studio = () => {
 
     setIsMinting(true)
 
-    const uri = await uploadIPFSTokenMetadata({
-      name,
-      symbol,
-      description,
-      image: await playgroundRef.current!.toPng(),
-      sellerFeeBasisPoints: 1000,
-    })
+    try {
+      const uri = await uploadIPFSTokenMetadata({
+        name,
+        symbol,
+        description,
+        image: await playgroundRef.current!.toPng(),
+        sellerFeeBasisPoints: 1000,
+      })
 
-    const metadata: CreateNftInput = {
-      name,
-      symbol,
-      sellerFeeBasisPoints: 1000,
-      uri,
-      creators: newNftCreators.map(creator => {
-        return {
-          address: new PublicKey(creator.address),
-          share: creator.share,
-        }
-      }),
+      const metadata: CreateNftInput = {
+        name,
+        symbol,
+        sellerFeeBasisPoints: 1000,
+        uri,
+        creators: newNftCreators.map(creator => {
+          return {
+            address: new PublicKey(creator.address),
+            share: creator.share,
+          }
+        }),
+      }
+
+      const result = await metaplex
+        .use(walletAdapterIdentity(wallet))
+        .nfts()
+        .create(metadata)
+
+      navigate(`/view/${result.mintAddress.toBase58()}`)
+    } catch (error) {
+      setIsMinting(false)
+      throw error
     }
-
-    const result = await metaplex
-      .use(walletAdapterIdentity(wallet))
-      .nfts()
-      .create(metadata)
-
-    navigate(`/view/${result.mintAddress.toBase58()}`)
   }
 
   return (
@@ -222,10 +241,17 @@ const Studio = () => {
                   const imageIPFSURI = nft.json?.image
 
                   if (imageIPFSURI) {
-                    playgroundRef.current?.addImage(getIPFSURL(imageIPFSURI))
+                    playgroundRef.current?.add(
+                      getIPFSURL(imageIPFSURI),
+                      nft.address.toBase58(),
+                    )
                   }
 
-                  setUsedNfts(values => [...values, nft])
+                  if (
+                    !usedNfts.some(value => value.address.equals(nft.address))
+                  ) {
+                    setUsedNfts(values => [...values, nft])
+                  }
                 }}
               />
             ))}
@@ -301,7 +327,11 @@ const Studio = () => {
               >
                 Cancel
               </button>
-              <button onClick={mint} className={styles.confirmButton}>
+              <button
+                disabled={isMinting}
+                className={styles.confirmButton}
+                onClick={isMinting ? undefined : mint}
+              >
                 {isMinting ? 'Minting...' : 'Confirm'}
               </button>
             </div>

@@ -2,13 +2,30 @@
   position: relative;
   overflow: hidden;
 
-  img {
+  .insertion {
     display: block;
     position: absolute;
+
+    img {
+      pointer-events: none;
+      width: 100%;
+      height: auto;
+    }
 
     &.selected {
       cursor: move;
       outline: 2px solid #3030d0;
+
+      &::after {
+        cursor: nwse-resize;
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 10px;
+        height: 10px;
+        background-color: #3030d0;
+      }
     }
   }
 }
