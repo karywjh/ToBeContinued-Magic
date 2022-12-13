@@ -4,13 +4,16 @@ import {
   walletAdapterIdentity,
 } from '@metaplex-foundation/js'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { uploadIPFSTokenMetadata } from '../../common/ipfs'
 import styles from './Mint.module.scss'
 
 const Mint = () => {
   const { connection } = useConnection()
 
+  const navigate = useNavigate()
   const wallet = useWallet()
   const metaplex = useMemo(() => new Metaplex(connection), [connection])
 
@@ -18,6 +21,7 @@ const Mint = () => {
   const [symbol, setSymbol] = useState('')
   const [description, setDescription] = useState('')
   const [sellerFeeBasisPoints_, setSellerFeeBasisPoints] = useState('')
+  const [creatorAddress, setCreatorAddress] = useState('')
   const [imageFile, setImageFile] = useState<File>()
   const [imageSrc, setImageSrc] = useState<string>()
 
@@ -63,7 +67,7 @@ const Mint = () => {
       uri,
       creators: [
         {
-          address: wallet.publicKey,
+          address: new PublicKey(creatorAddress || wallet.publicKey),
           share: 100,
         },
       ],
@@ -74,7 +78,7 @@ const Mint = () => {
       .nfts()
       .create(metadata)
 
-    console.log('tokenAddress', result.mintAddress.toBase58())
+    navigate(`/view/${result.mintAddress.toBase58()}`)
   }
 
   return (
@@ -104,6 +108,12 @@ const Mint = () => {
           placeholder="Seller Fee Basis Points (0-10000)"
           value={sellerFeeBasisPoints_}
           onChange={event => setSellerFeeBasisPoints(event.target.value)}
+        />
+        <input
+          className={styles.input}
+          placeholder="Creator Address"
+          value={creatorAddress}
+          onChange={event => setCreatorAddress(event.target.value)}
         />
         <div className={styles.input}>
           <input
