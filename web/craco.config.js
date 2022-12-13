@@ -6,6 +6,7 @@ module.exports = {
       plugins: [
         new webpack.ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
+          process: 'process/browser',
         }),
       ],
       resolve: {
@@ -13,6 +14,7 @@ module.exports = {
           buffer: require.resolve('buffer'),
           crypto: require.resolve('crypto-browserify'),
           path: require.resolve('path-browserify'),
+          'process/browser': require.resolve('process/browser'),
           stream: require.resolve('stream-browserify'),
           zlib: require.resolve('browserify-zlib'),
         },

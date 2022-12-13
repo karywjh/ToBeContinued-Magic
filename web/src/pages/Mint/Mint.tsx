@@ -56,8 +56,8 @@ const Mint = () => {
       name,
       symbol,
       description,
-      image: imageFile,
       sellerFeeBasisPoints,
+      image: imageFile,
     })
 
     const metadata: CreateNftInput = {

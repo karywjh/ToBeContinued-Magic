@@ -3,7 +3,6 @@ import { useConnection } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { getIPFSURL } from '../../common/ipfs'
 import NavBar from '../../components/Navbar/Navbar'
 import styles from './View.module.scss'
 
@@ -22,16 +21,8 @@ const View = () => {
   useEffect(() => {
     metaplex
       .nfts()
-      .findByMint({
-        mintAddress,
-        loadJsonMetadata: false,
-      })
-      .then(async token => {
-        const res = await fetch(getIPFSURL(token.uri))
-        const json = await res.json()
-
-        setNft(Object.assign(token, { json }) as Nft)
-      })
+      .findByMint({ mintAddress })
+      .then(token => setNft(token as Nft))
   }, [mintAddress, metaplex])
 
   return (
@@ -43,7 +34,7 @@ const View = () => {
             {nft.json?.image && (
               <img
                 className={styles.image}
-                src={getIPFSURL(nft.json?.image)}
+                src={nft.json?.image}
                 alt={nft.name}
               />
             )}
@@ -60,7 +51,7 @@ const View = () => {
                   {nft.creators.map((creator, index) => (
                     <li key={index}>
                       <a
-                        href={`https://solscan.io/account/${creator.address.toBase58()}?cluster=devnet`}
+                        href={`https://solscan.io/account/${creator.address.toBase58()}`}
                       >
                         {creator.address.toBase58()}
                       </a>{' '}
@@ -72,9 +63,7 @@ const View = () => {
               <div className={styles.buttons}>
                 <button
                   onClick={() =>
-                    window.open(
-                      `https://solscan.io/token/${mintAddress_}?cluster=devnet`,
-                    )
+                    window.open(`https://solscan.io/token/${mintAddress_}`)
                   }
                 >
                   View on Solscan

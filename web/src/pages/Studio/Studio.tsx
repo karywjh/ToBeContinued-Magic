@@ -8,23 +8,15 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getIPFSURL, uploadIPFSTokenMetadata } from '../../common/ipfs'
+import { uploadIPFSTokenMetadata } from '../../common/ipfs'
 import Navbar from '../../components/Navbar/Navbar'
 import NftRenderer from '../../components/NftRenderer/NftRenderer'
 import Playground, { PlaygroundRef } from '../../components/Playground'
 import styles from './Studio.module.scss'
 
-const PRE_MINTED_NFT_ADDRESSES = [
-  'CdtKbnLfHjwBpbT85dCCjj1A41bwE1EcS2WjyDPve1z7',
-  'DM2Ao2CsgurRCXfJKJbdgPWD9qjfFA942htm1fdAnAoG',
-  'Gun1AeW5uQaQAYjJPgGLfv5qiSiDrtHANDCN8ZvVpXR1',
-  'BcvA6dKcTEq2ragcK46ry9AQLavap4PbTCu2C8NTqXts',
-  '7aV4pNXZHBGDJmcrzk62uZHkuydqVdsudJLWAKzaDodd',
-  '6tTDtui3ZVWgBnQAtTvQFZRTn7QgwrtpACh3jVzfn86N',
-  'EfCuG67goBQUm33LBEQ3RtLChU8kbh12wKWJucsMwQ3',
-  'mA4x5bXtjSDciAumW9DVgS5aWdTbuAEGEEBfriKCXNx',
-  'BQxa4zTyQEGXacgBYREMRsgsCeX18K48ePpT7Px4sx1X',
-]
+const FIXED_SELLER_FEE_BASIS_POINTS = 1000
+
+const PRE_MINTED_NFT_ADDRESSES: string[] = []
 
 const Studio = () => {
   const { connection } = useConnection()
@@ -47,23 +39,11 @@ const Studio = () => {
   useEffect(() => {
     Promise.all(
       PRE_MINTED_NFT_ADDRESSES.map(address => {
-        return metaplex.nfts().findByMint({
-          mintAddress: new PublicKey(address),
-          loadJsonMetadata: false,
-        })
+        return metaplex
+          .nfts()
+          .findByMint({ mintAddress: new PublicKey(address) })
       }),
-    )
-      .then(results => {
-        return Promise.all(
-          results.map(async result => {
-            const res = await fetch(getIPFSURL(result.uri))
-            const json = await res.json()
-
-            return Object.assign(result, { json }) as Nft
-          }),
-        )
-      })
-      .then(setNfts)
+    ).then(tokens => setNfts(tokens as Nft[]))
   }, [metaplex])
 
   const selectImageFile = () => {
@@ -144,16 +124,15 @@ const Studio = () => {
 
   const newNftCreators = useMemo(() => {
     const contributionPoints = Number(contributionPoints_) || 0
-    const fixedSellerFeeBasisPoints = 1000
     const assignableSellerFeeBasisPoints =
-      fixedSellerFeeBasisPoints - contributionPoints
+      FIXED_SELLER_FEE_BASIS_POINTS - contributionPoints
 
     const totalSellerFeeBasisPoints = usedNfts.reduce(
       (points, nft) => points + nft.sellerFeeBasisPoints,
       0,
     )
 
-    const ratio = assignableSellerFeeBasisPoints / fixedSellerFeeBasisPoints
+    const ratio = assignableSellerFeeBasisPoints / FIXED_SELLER_FEE_BASIS_POINTS
     const creatorsMap: Record<string, number> = {}
 
     let totalShare = 0
@@ -199,14 +178,14 @@ const Studio = () => {
         name,
         symbol,
         description,
+        sellerFeeBasisPoints: FIXED_SELLER_FEE_BASIS_POINTS,
         image: await playgroundRef.current!.toPng(),
-        sellerFeeBasisPoints: 1000,
       })
 
       const metadata: CreateNftInput = {
         name,
         symbol,
-        sellerFeeBasisPoints: 1000,
+        sellerFeeBasisPoints: FIXED_SELLER_FEE_BASIS_POINTS,
         uri,
         creators: newNftCreators.map(creator => {
           return {
@@ -240,13 +219,10 @@ const Studio = () => {
                 key={idx}
                 nft={nft}
                 onClick={() => {
-                  const imageIPFSURI = nft.json?.image
+                  const imageUrl = nft.json?.image
 
-                  if (imageIPFSURI) {
-                    playgroundRef.current?.add(
-                      getIPFSURL(imageIPFSURI),
-                      nft.address.toBase58(),
-                    )
+                  if (imageUrl) {
+                    playgroundRef.current?.add(imageUrl, nft.address.toBase58())
                   }
 
                   if (
@@ -324,7 +300,8 @@ const Studio = () => {
               </div>
               <div className={styles.split}>
                 <div>
-                  New NFT will have a fixed 1000 seller fee basis points.
+                  New NFT will have a fixed {FIXED_SELLER_FEE_BASIS_POINTS}{' '}
+                  seller fee basis points.
                   <br />
                   <br />
                   The creators of the new NFT will be:{' '}
