@@ -1,12 +1,16 @@
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import background from '../../assets/background.svg'
+import background from '../../assets/background3.svg'
 import santaCloth from '../../assets/santa-cloth.svg'
 import santaHat from '../../assets/santa-hat.svg'
 import squirry from '../../assets/squirry.svg'
 import tree from '../../assets/tree.svg'
 import styles from './Home.module.scss'
+import line from '../../assets/pointingLine.svg'
+import line3 from '../../assets/pointingLine3.svg'
+import line4 from '../../assets/pointingLine4.svg'
+import line5 from '../../assets/pointingLine5.svg'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -15,13 +19,13 @@ const Home = () => {
   const [movement, setMovement] = useState(0)
 
   const breakpoint = useMemo(() => {
-    if (movement >= 15000) return 8
-    if (movement >= 13000) return 7
-    if (movement >= 11000) return 6
-    if (movement >= 9000) return 5
-    if (movement >= 7000) return 4
-    if (movement >= 5000) return 3
-    if (movement >= 3000) return 2
+    if (movement >= 23000) return 8
+    if (movement >= 20000) return 7
+    if (movement >= 16000) return 6
+    if (movement >= 13000) return 5
+    if (movement >= 10000) return 4
+    if (movement >= 7000) return 3
+    if (movement >= 4000) return 2
     if (movement >= 1000) return 1
     return 0
   }, [movement])
@@ -64,6 +68,26 @@ const Home = () => {
           breakpoint >= 1 && styles.visible,
         )}
       />
+
+      <div
+        className={classNames(
+          styles.creator,
+          styles.creator1,
+          breakpoint === 1 && styles.visible,
+        )}
+      >
+        created by n6aM..nmTKq
+      </div>
+      <img
+        src={line}
+        alt="line"
+        className={classNames(
+          styles.line,
+          styles.line1,
+          breakpoint === 1 && styles.visible,
+        )}
+      ></img>
+
       <img
         src={santaHat}
         alt="santa hat"
@@ -73,6 +97,26 @@ const Home = () => {
           breakpoint >= 3 && styles.visibleSecond,
         )}
       />
+
+      <div
+        className={classNames(
+          styles.creator,
+          styles.creator2,
+          breakpoint === 2 && styles.visible,
+        )}
+      >
+        created by EqPt..2ouw
+      </div>
+      <img
+        src={line3}
+        alt="line"
+        className={classNames(
+          styles.line,
+          styles.line2,
+          breakpoint === 2 && styles.visible,
+        )}
+      ></img>
+
       <img
         src={santaCloth}
         alt="santa cloth"
@@ -82,6 +126,26 @@ const Home = () => {
           breakpoint >= 5 && styles.visibleSecond,
         )}
       />
+
+      <div
+        className={classNames(
+          styles.creator,
+          styles.creator3,
+          breakpoint === 4 && styles.visible,
+        )}
+      >
+        created by CxQq..tq1a
+      </div>
+      <img
+        src={line4}
+        alt="line"
+        className={classNames(
+          styles.line,
+          styles.line3,
+          breakpoint === 4 && styles.visible,
+        )}
+      ></img>
+
       <img
         src={tree}
         alt="tree"
@@ -91,6 +155,37 @@ const Home = () => {
           breakpoint >= 7 && styles.visibleSecond,
         )}
       />
+
+      <div
+        className={classNames(
+          styles.creator,
+          styles.creator4,
+          breakpoint === 6 && styles.visible,
+        )}
+      >
+        created by Cy18..64tL
+      </div>
+      <img
+        src={line5}
+        alt="line"
+        className={classNames(
+          styles.line,
+          styles.line4,
+          breakpoint === 6 && styles.visible,
+        )}
+      ></img>
+
+      <div
+        className={classNames(
+          styles.cocreators,
+          breakpoint === 8 && styles.visible,
+        )}
+      >
+        <div className={styles.title}>Co-created by:</div>
+        n6aM..nmTKq
+        <br /> EqPt..2ouw <br /> CxQq..tq1a
+      </div>
+
       <div className={styles.bottomLayer}>
         {breakpoint < 8 && <div className={styles.tip}>{tip}</div>}
         {breakpoint === 8 && (
