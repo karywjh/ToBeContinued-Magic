@@ -1,6 +1,8 @@
 # ToBeContinued
 
-This project is for Magic Eden Hackathon.
+This project repo is for Magic Eden Hackathon. Here is the Youtube video for the quick illustration of the idea of our project.
+
+[![ToBeContinued Video](https://img.youtube.com/vi/BwA3WKoP5r0/0.jpg)](https://youtu.be/BwA3WKoP5r0)
 
 ## Summary
 
