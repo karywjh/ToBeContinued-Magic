@@ -1,16 +1,16 @@
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import background from '../../assets/background3.svg'
+import background from '../../assets/background.svg'
+import line from '../../assets/pointingLine.svg'
+import line3 from '../../assets/pointingLine3.svg'
+import line4 from '../../assets/pointingLine4.svg'
+import line5 from '../../assets/pointingLine5.svg'
 import santaCloth from '../../assets/santa-cloth.svg'
 import santaHat from '../../assets/santa-hat.svg'
 import squirry from '../../assets/squirry.svg'
 import tree from '../../assets/tree.svg'
 import styles from './Home.module.scss'
-import line from '../../assets/pointingLine.svg'
-import line3 from '../../assets/pointingLine3.svg'
-import line4 from '../../assets/pointingLine4.svg'
-import line5 from '../../assets/pointingLine5.svg'
 
 const Home = () => {
   const navigate = useNavigate()

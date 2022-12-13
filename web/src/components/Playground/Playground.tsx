@@ -13,6 +13,7 @@ export interface PlaygroundRef {
   sendToBack(element: HTMLElement): void
   getAll(): HTMLElement[]
   getSelection(): HTMLElement | undefined
+  setBackgroundColor(color: string): void
   toPng(): Promise<File>
 }
 
@@ -107,6 +108,10 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       return Array.from(outputRef.current!.children) as HTMLElement[]
     }
 
+    const setBackgroundColor = (backgroundColor: string) => {
+      outputRef.current!.style.backgroundColor = backgroundColor
+    }
+
     const toPng = async () => {
       const output = outputRef.current!
       const png = await htmlToImage.toPng(output)
@@ -124,6 +129,7 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
         sendToBack,
         getAll,
         getSelection,
+        setBackgroundColor,
         toPng,
       }
     })

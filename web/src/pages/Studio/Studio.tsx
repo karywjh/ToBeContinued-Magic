@@ -25,7 +25,6 @@ const PRE_MINTED_NFT_ADDRESSES: string[] = [
   'GiXMCHbnX1DAJMmKRU85JqhHJh1cZPTHCyhp3GTLkWfC',
   'CokVEmB72ubacCyNuiMaDnaeoJ164hskFseujPkjgQz1',
   '24jj4pUR8PZnLQrR6WpQMyyXTm8V9npVd14VpTPaDFGm',
-  '6ucGnNz2LdZccDTpt2Mh7ajEjWxf3NGNhoeKyScHZoKm',
 ]
 
 const Studio = () => {
@@ -274,6 +273,8 @@ const Studio = () => {
               value={backgroundColor}
               onChange={e => {
                 setBackgroundColor(e.target.value)
+
+                playgroundRef.current?.setBackgroundColor(e.target.value)
               }}
             />
           </div>
