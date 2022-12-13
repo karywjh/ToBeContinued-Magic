@@ -16,7 +16,17 @@ import styles from './Studio.module.scss'
 
 const FIXED_SELLER_FEE_BASIS_POINTS = 1000
 
-const PRE_MINTED_NFT_ADDRESSES: string[] = []
+const PRE_MINTED_NFT_ADDRESSES: string[] = [
+  'BngLdWmieh2RG2K4tFvZtoFGntSxeT4TAvHMRsHhMCk1',
+  'HkRnicaJfskBUztRFpM5r9zsWEU997j1FvkUC5mBdbjq',
+  'Gp7Qr9JqjD8jduKKV8ERRQ8zWrbbXX2U1B8i3XKoUNGk',
+  '7T22zG9Bbb2HKzWDFDnWtDYucJRR2kVDRe7HYmVognGN',
+  'CbQWQdHPFnzBom3mQ5v6FtMzBFxzwmT3Eo4rAFQDc7wa',
+  'GiXMCHbnX1DAJMmKRU85JqhHJh1cZPTHCyhp3GTLkWfC',
+  'CokVEmB72ubacCyNuiMaDnaeoJ164hskFseujPkjgQz1',
+  '24jj4pUR8PZnLQrR6WpQMyyXTm8V9npVd14VpTPaDFGm',
+  '6ucGnNz2LdZccDTpt2Mh7ajEjWxf3NGNhoeKyScHZoKm',
+]
 
 const Studio = () => {
   const { connection } = useConnection()
@@ -236,15 +246,16 @@ const Studio = () => {
           </div>
         </div>
         <div className={styles.workstation}>
-          <div
-            className={styles.playgroundBorder}
-            style={{ backgroundColor: backgroundColor }}
-          >
+          <div className={styles.playgroundBorder}>
             {useMemo(
               () => (
-                <Playground ref={playgroundRef} className={styles.playground} />
+                <Playground
+                  ref={playgroundRef}
+                  className={styles.playground}
+                  style={{ backgroundColor: backgroundColor }}
+                />
               ),
-              [],
+              [backgroundColor],
             )}
           </div>
           <div className={styles.controls}>
