@@ -227,6 +227,29 @@
   font-weight: 600;
 }
 
+.enterStudio {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  font-size: 24px;
+  padding: 10px 15px;
+  border-radius: 15px;
+
+  cursor: pointer;
+
+  transition: transform 150ms;
+  background-color: #ffffffa0;
+  color: #000000;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  &:active {
+    transform: scale(1);
+  }
+}
+
 .bottomLayer {
   position: absolute;
   z-index: 10;

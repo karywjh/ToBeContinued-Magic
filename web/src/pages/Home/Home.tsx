@@ -55,6 +55,12 @@ const Home = () => {
       }}
     >
       <div className={styles.name}>To Be Continued</div>
+      {breakpoint < 8 && (
+        <div className={styles.enterStudio} onClick={() => navigate('/browse')}>
+          Enter Studio
+        </div>
+      )}
+
       <img
         src={background}
         alt="background"
